@@ -6,13 +6,16 @@ class RoundedButton extends StatelessWidget {
   final Function onPress;
 
   const RoundedButton(
-      {Key key, this.buttonTitle, this.color, @required this.onPress})
+      {Key? key,
+      required this.buttonTitle,
+      required this.color,
+      required this.onPress})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Material(
         elevation: 5.0,
         color: color,
@@ -23,7 +26,7 @@ class RoundedButton extends StatelessWidget {
           height: 42.0,
           child: Text(
             buttonTitle,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ),

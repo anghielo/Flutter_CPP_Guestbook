@@ -21,7 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
 
   // messageText for messages that will be saved in Firestore
-  String messageText;
+  late String messageText;
 
   @override
   void initState() {

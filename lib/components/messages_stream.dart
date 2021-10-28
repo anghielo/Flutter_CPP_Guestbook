@@ -6,7 +6,7 @@ import 'package:calpoly_tick_talk/components/message_bubble.dart';
 final _firestore = Firestore.instance;
 
 class MessagesStream extends StatelessWidget {
-  const MessagesStream({Key key}) : super(key: key);
+  const MessagesStream({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class MessagesStream extends StatelessWidget {
           );
         }
         // final messages = snapshot.data.documents;
-        final messages = snapshot.data.documents.reversed;
+        final messages = snapshot.data!.documents.reversed;
         // Place the messages received to a list
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {

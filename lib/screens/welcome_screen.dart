@@ -8,6 +8,8 @@ class WelcomeScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
   static String id = 'welcome_screen';
 
+  const WelcomeScreen({Key? key}) : super(key: key);
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -15,9 +17,9 @@ class WelcomeScreen extends StatefulWidget {
 // Adding the SingleTickerProviderStateMixin enables  _WelcomeScreenState to act as a ticker provider
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation animation;
-  Animation tweenAnimation;
+  late AnimationController controller;
+  late Animation animation;
+  late Animation tweenAnimation;
 
   @override
   void initState() {

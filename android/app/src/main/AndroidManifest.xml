@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.dany_flores_chat.my_buddy_chat">
    <application
-        android:label="my_buddy_chat"
+        android:label="My Buddy Chat"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
