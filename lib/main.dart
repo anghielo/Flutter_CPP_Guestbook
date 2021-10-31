@@ -11,10 +11,11 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   /// Requires that the Firebase Auth emulator is running locally
-  /// e.g via `melos run firebase:emulator`.
   await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   runApp(CPPChat());
 }
+
+// void main() => runApp(CPPChat());
 
 class CPPChat extends StatelessWidget {
   @override
