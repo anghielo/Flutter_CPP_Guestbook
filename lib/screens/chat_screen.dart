@@ -4,8 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:calpoly_tick_talk/components/messages_stream.dart';
 
-final _firestore = Firestore.instance;
-FirebaseUser loggedInUser;
+final _firestore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
+User? loggedInUser = _auth.currentUser;
 
 class ChatScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
@@ -26,16 +27,15 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-
     getCurrentUser();
   }
 
   void getCurrentUser() async {
     try {
-      final user = await _auth.currentUser();
+      final user = _auth.currentUser!;
       if (user != null) {
         loggedInUser = user;
-        print(loggedInUser.email + ' logged in');
+        print(loggedInUser!.email);
       }
     } catch (e) {
       print(e);
@@ -54,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void messagesStream() async {
     // This is how you subscribe to the Firestore collection. Firestore pushes to stream
     await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var message in snapshot.documents) {
+      for (var message in snapshot.docs) {
         print(message.data);
       }
     }
@@ -69,7 +69,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
-                messagesStream(); // Can be deleted after testing
+                //messagesStream(); // Can be deleted after testing
                 // getMessages(); // Testing if data is pulling
                 // Logout user
                 _auth.signOut();
@@ -110,7 +110,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       // messages is the collection in Firestore Database
                       _firestore.collection('messages').add({
                         'text': messageText,
-                        'sender': loggedInUser.email,
+                        'sender': loggedInUser!.email,
+                        'time': FieldValue.serverTimestamp()
                       });
                     },
                     child: Text(

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:calpoly_tick_talk/screens/chat_screen.dart';
 import 'package:calpoly_tick_talk/components/message_bubble.dart';
 
-final _firestore = Firestore.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class MessagesStream extends StatelessWidget {
   const MessagesStream({Key? key}) : super(key: key);
@@ -11,7 +11,10 @@ class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('messages').snapshots(),
+      stream: _firestore
+          .collection('messages')
+          .orderBy('time', descending: false)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -21,19 +24,20 @@ class MessagesStream extends StatelessWidget {
           );
         }
         // final messages = snapshot.data.documents;
-        final messages = snapshot.data!.documents.reversed;
+        final messages = snapshot.data!.docs.reversed;
         // Place the messages received to a list
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
-          final messageText = message.data['text'];
-          final messageSender = message.data['sender'];
-
-          final currentUser = loggedInUser.email;
+          final messageText = message.get('text');
+          final messageSender = message.get('sender');
+          final messageTime = message.get('time') as Timestamp;
+          final currentUser = loggedInUser!.email;
 
           final messageBubble = MessageBubble(
             sender: messageSender,
             text: messageText,
             isMe: currentUser == messageSender,
+            time: messageTime,
           );
           messageBubbles.add(messageBubble);
         }

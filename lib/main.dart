@@ -1,10 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:calpoly_tick_talk/screens/welcome_screen.dart';
 import 'package:calpoly_tick_talk/screens/login_screen.dart';
 import 'package:calpoly_tick_talk/screens/registration_screen.dart';
 import 'package:calpoly_tick_talk/screens/chat_screen.dart';
 
-void main() => runApp(CPPChat());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  /// Requires that the Firebase Auth emulator is running locally
+  /// e.g via `melos run firebase:emulator`.
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  runApp(CPPChat());
+}
 
 class CPPChat extends StatelessWidget {
   @override

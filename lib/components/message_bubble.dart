@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
   final String sender;
   final String text;
   final bool isMe;
+  final Timestamp time;
 
   const MessageBubble(
-      {Key? key, required this.sender, required this.text, required this.isMe})
+      {Key? key,
+      required this.sender,
+      required this.text,
+      required this.isMe,
+      required this.time})
       : super(key: key);
 
   @override
@@ -20,7 +26,7 @@ class MessageBubble extends StatelessWidget {
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(
-            sender,
+            '$sender ${DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000)}', // add this only if you want to show the time along with the email. If you dont want this then don't add this DateTime thing
             style: TextStyle(
               fontSize: 12.0,
               color: Colors.black54,

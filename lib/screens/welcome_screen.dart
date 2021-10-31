@@ -84,7 +84,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             SizedBox(
               height: 48.0,
             ),
-            // Calling created widget
+            // Calling created widget and passing 3 variables
             RoundedButton(
               buttonTitle: 'Log In',
               color: Color(0xFFF9AF0F),
