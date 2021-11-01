@@ -22,9 +22,9 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.google.gms.google-services'
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
@@ -82,6 +82,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.android.support:multidex:2.0.1' //enter the latest multidex version
+    implementation "com.google.firebase:firebase-auth:9.6.1"
+    implementation "com.google.firebase:firebase-database:9.6.1"
+    implementation platform('com.google.firebase:firebase-bom:28.4.2')
 }
-
-apply plugin: 'com.google.gms.google-services'

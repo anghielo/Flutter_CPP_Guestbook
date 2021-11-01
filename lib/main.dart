@@ -15,8 +15,6 @@ Future<void> main() async {
   runApp(CPPChat());
 }
 
-// void main() => runApp(CPPChat());
-
 class CPPChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

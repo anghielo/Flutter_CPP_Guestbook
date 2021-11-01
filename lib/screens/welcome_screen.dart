@@ -49,6 +49,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     super.dispose();
   }
 
+  void _pushPage(BuildContext context, Widget page) {
+    Navigator.of(context) /*!*/ .push(
+      MaterialPageRoute<void>(builder: (_) => page),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +78,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 SizedBox(width: 10),
                 TypewriterAnimatedTextKit(
                   // '${controller.value.toInt()}%',
-                  text: ['Buddy Chat'],
+                  text: ['CPP Buddy Chat'],
                   textStyle: TextStyle(
                     color: Colors.blue.shade900,
                     fontSize: 40.0,
@@ -90,10 +96,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               color: Color(0xFFF9AF0F),
               onPress: () {
                 //Go to login screen.
-                Navigator.pushNamed(
-                  context,
-                  LoginScreen.id,
-                );
+                _pushPage(context, LoginScreen());
+
+                // Navigator.pushNamed(
+                //   context,
+                //   LoginScreen.id,
+                // );
               },
             ),
             RoundedButton(
@@ -101,10 +109,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               color: Color(0xFF16402D),
               onPress: () {
                 //Go to login screen.
-                Navigator.pushNamed(
-                  context,
-                  RegistrationScreen.id,
-                );
+                _pushPage(context, RegistrationScreen());
+                // Navigator.pushNamed(
+                //   context,
+                //   RegistrationScreen.id,
+                // );
               },
             ),
           ],
