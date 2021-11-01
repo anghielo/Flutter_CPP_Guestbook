@@ -10,6 +10,8 @@ class LoginScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
   static const String id = 'login_screen';
 
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -27,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -42,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 48.0,
               ),
               TextField(
@@ -56,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   labelText: 'Enter your email',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8.0,
               ),
               TextField(
@@ -70,12 +72,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   labelText: 'Enter your password',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15.0,
               ),
               RoundedButton(
                 buttonTitle: 'Log In',
-                color: Color(0xFFF9AF0F),
+                color: const Color(0xFFF9AF0F),
                 onPress: () async {
                   setState(() {
                     // Indicate loading pending authentication
@@ -95,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       showSpinner = false;
                     });
                   } catch (e) {
-                    print(e);
+                    // print(e);
                   }
                 },
               ),

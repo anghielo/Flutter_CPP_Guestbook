@@ -17,7 +17,7 @@ class MessagesStream extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               backgroundColor: Colors.lightBlueAccent,
             ),
@@ -47,7 +47,8 @@ class MessagesStream extends StatelessWidget {
             // reverse property makes it so that messages are sticky towards the bottom of the list view
             reverse: true,
             // Adjusts the padding of the message bubbles from the screen
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
             children: messageBubbles,
           ),
         );

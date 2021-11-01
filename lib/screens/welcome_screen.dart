@@ -27,7 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     super.initState();
 
     Firebase.initializeApp().whenComplete(() {
-      print("completed");
+      //print("completed");
       setState(() {});
     });
 

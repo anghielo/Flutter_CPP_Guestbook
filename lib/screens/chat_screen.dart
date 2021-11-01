@@ -12,6 +12,8 @@ class ChatScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
   static String id = 'chat_screen';
 
+  const ChatScreen({Key? key}) : super(key: key);
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -33,12 +35,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void getCurrentUser() async {
     try {
       final user = _auth.currentUser!;
-      if (user != null) {
-        loggedInUser = user;
-        print(loggedInUser!.email);
-      }
+      loggedInUser = user;
+      // print(loggedInUser!.email);
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 
@@ -55,7 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // This is how you subscribe to the Firestore collection. Firestore pushes to stream
     await for (var snapshot in _firestore.collection('messages').snapshots()) {
       for (var message in snapshot.docs) {
-        print(message.data);
+        // print(message.data);
       }
     }
   }
@@ -67,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 //messagesStream(); // Can be deleted after testing
                 // getMessages(); // Testing if data is pulling
@@ -77,8 +77,8 @@ class _ChatScreenState extends State<ChatScreen> {
               }),
         ],
         centerTitle: true,
-        title: Text('What\'s on your mind?'),
-        backgroundColor: Color(0xFF16402D),
+        title: const Text('What\'s on your mind?'),
+        backgroundColor: const Color(0xFF16402D),
       ),
       body: SafeArea(
         child: Column(
@@ -86,7 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             // MessageStream calls StreamBuilder to be able to update the chat from Firestore
-            MessagesStream(),
+            const MessagesStream(),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -114,7 +114,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         'time': FieldValue.serverTimestamp()
                       });
                     },
-                    child: Text(
+                    child: const Text(
                       'Send',
                       style: kSendButtonTextStyle,
                     ),
