@@ -10,6 +10,8 @@ class RegistrationScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
   static String id = 'registration_screen';
 
+  const RegistrationScreen({Key? key}) : super(key: key);
+
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
@@ -27,7 +29,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -36,13 +38,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Flexible(
                 child: Hero(
                   tag: 'logo',
-                  child: Container(
+                  child: SizedBox(
                     height: 200.0,
                     child: Image.asset('images/logo.png'),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 48.0,
               ),
               TextField(
@@ -57,7 +59,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Enter your email',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8.0,
               ),
               TextField(
@@ -72,12 +74,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Enter your password',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15.0,
               ),
               RoundedButton(
                 buttonTitle: 'Register',
-                color: Color(0xFF16402D),
+                color: const Color(0xFF16402D),
                 onPress: () async {
                   setState(() {
                     showSpinner = true;
@@ -88,9 +90,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   try {
                     final newUser = await _auth.createUserWithEmailAndPassword(
                         email: email, password: password);
-                    if (newUser != null) {
-                      Navigator.pushNamed(context, ChatScreen.id);
-                    }
+                    Navigator.pushNamed(context, ChatScreen.id);
 
                     setState(() {
                       showSpinner = false;

@@ -1,5 +1,6 @@
 import 'package:calpoly_tick_talk/screens/login_screen.dart';
 import 'package:calpoly_tick_talk/screens/registration_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:calpoly_tick_talk/components/rounded_button.dart';
@@ -25,8 +26,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
 
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
+
     controller = AnimationController(
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       // Ticker provider which is the object created from the class
       vsync: this,
     );
@@ -60,7 +66,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     return Scaffold(
       backgroundColor: tweenAnimation.value, //Colors.white,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,16 +75,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               children: <Widget>[
                 Hero(
                   tag: 'logo',
-                  child: Container(
+                  child: SizedBox(
                     child: Image.asset('images/logo.png'),
                     // Animation increases the logo in size
-                    height: animation.value * 120.0,
+                    height: animation.value * 50.0,
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 TypewriterAnimatedTextKit(
                   // '${controller.value.toInt()}%',
-                  text: ['CPP Buddy Chat'],
+                  text: ['Buddy Chat'],
                   textStyle: TextStyle(
                     color: Colors.blue.shade900,
                     fontSize: 40.0,
@@ -87,33 +93,34 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 ),
               ],
             ),
-            SizedBox(
-              height: 48.0,
+            const SizedBox(
+              height: 24.0,
             ),
             // Calling created widget and passing 3 variables
             RoundedButton(
               buttonTitle: 'Log In',
-              color: Color(0xFFF9AF0F),
+              color: const Color(0xFFF9AF0F),
               onPress: () {
                 //Go to login screen.
-                _pushPage(context, LoginScreen());
+                // _pushPage(context, LoginScreen());
 
-                // Navigator.pushNamed(
-                //   context,
-                //   LoginScreen.id,
-                // );
+                Navigator.pushNamed(
+                  context,
+                  LoginScreen.id,
+                );
               },
             ),
             RoundedButton(
               buttonTitle: 'Register',
-              color: Color(0xFF16402D),
+              color: const Color(0xFF16402D),
               onPress: () {
                 //Go to login screen.
-                _pushPage(context, RegistrationScreen());
-                // Navigator.pushNamed(
-                //   context,
-                //   RegistrationScreen.id,
-                // );
+                // _pushPage(context, RegistrationScreen());
+
+                Navigator.pushNamed(
+                  context,
+                  RegistrationScreen.id,
+                );
               },
             ),
           ],

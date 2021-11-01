@@ -6,14 +6,7 @@ import 'package:calpoly_tick_talk/screens/login_screen.dart';
 import 'package:calpoly_tick_talk/screens/registration_screen.dart';
 import 'package:calpoly_tick_talk/screens/chat_screen.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
-  /// Requires that the Firebase Auth emulator is running locally
-  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-  runApp(CPPChat());
-}
+void main() => runApp(CPPChat());
 
 class CPPChat extends StatelessWidget {
   @override
@@ -27,9 +20,9 @@ class CPPChat extends StatelessWidget {
       routes: {
         // Using static variables instead for faster load
         // '/': (context) => WelcomeScreen(),
-        WelcomeScreen.id: (context) => WelcomeScreen(),
+        WelcomeScreen.id: (context) => const WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
-        RegistrationScreen.id: (context) => RegistrationScreen(),
+        RegistrationScreen.id: (context) => const RegistrationScreen(),
         ChatScreen.id: (context) => ChatScreen(),
       },
     );
