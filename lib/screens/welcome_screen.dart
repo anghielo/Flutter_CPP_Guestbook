@@ -55,12 +55,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     super.dispose();
   }
 
-  void _pushPage(BuildContext context, Widget page) {
-    Navigator.of(context) /*!*/ .push(
-      MaterialPageRoute<void>(builder: (_) => page),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,9 +95,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               buttonTitle: 'Log In',
               color: const Color(0xFFF9AF0F),
               onPress: () {
-                //Go to login screen.
-                // _pushPage(context, LoginScreen());
-
+                //Go to login screen
                 Navigator.pushNamed(
                   context,
                   LoginScreen.id,
@@ -114,9 +106,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               buttonTitle: 'Register',
               color: const Color(0xFF16402D),
               onPress: () {
-                //Go to login screen.
-                // _pushPage(context, RegistrationScreen());
-
+                //Go to login screen
                 Navigator.pushNamed(
                   context,
                   RegistrationScreen.id,

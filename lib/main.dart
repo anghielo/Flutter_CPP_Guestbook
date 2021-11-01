@@ -29,7 +29,6 @@ class CPPChat extends StatelessWidget {
       //home: WelcomeScreen(),
       debugShowCheckedModeBanner:
           false, // Turn off red debug banner phone emulator
-      initialRoute: WelcomeScreen.id,
       routes: {
         // Using static variables instead for faster load
         // '/': (context) => WelcomeScreen(),
@@ -38,6 +37,7 @@ class CPPChat extends StatelessWidget {
         RegistrationScreen.id: (context) => const RegistrationScreen(),
         ChatScreen.id: (context) => const ChatScreen(),
       },
+      initialRoute: WelcomeScreen.id,
     );
   }
 }
