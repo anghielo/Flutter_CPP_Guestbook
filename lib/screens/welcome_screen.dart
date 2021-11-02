@@ -1,9 +1,11 @@
+import 'package:calpoly_tick_talk/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:provider/provider.dart';
 
+import '../main.dart';
 import '/components/rounded_button.dart';
 import '/screens/login_screen.dart';
-import '/screens/registration_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
@@ -73,7 +75,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 const SizedBox(width: 10),
                 TypewriterAnimatedTextKit(
                   // '${controller.value.toInt()}%',
-                  text: ['Buddy Chat'],
+                  text: const ['CHAT @ CPP'],
                   textStyle: TextStyle(
                     color: Colors.blue.shade900,
                     fontSize: 40.0,
@@ -85,18 +87,30 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             const SizedBox(
               height: 24.0,
             ),
-            // Calling created widget and passing 3 variables
-            RoundedButton(
-              buttonTitle: 'Welcome back friend :)',
-              color: const Color(0xFFF9AF0F),
-              onPress: () {
-                //Go to login screen
-                Navigator.pushNamed(
-                  context,
-                  LoginScreen.id,
-                );
-              },
+            Consumer<ApplicationState>(
+              builder: (context, appState, _) => Authentication(
+                email: appState.email,
+                loginState: appState.loginState,
+                startLoginFlow: appState.startLoginFlow,
+                verifyEmail: appState.verifyEmail,
+                signInWithEmailAndPassword: appState.signInWithEmailAndPassword,
+                cancelRegistration: appState.cancelRegistration,
+                registerAccount: appState.registerAccount,
+                signOut: appState.signOut,
+              ),
             ),
+            // Calling created widget and passing 3 variables
+            // RoundedButton(
+            //   buttonTitle: 'Welcome! Click here',
+            //   color: const Color(0xFFF9AF0F),
+            //   onPress: () {
+            //     //Go to login screen
+            //     Navigator.pushNamed(
+            //       context,
+            //       LoginScreen.id,
+            //     );
+            //   },
+            // ),
             // RoundedButton(
             //   buttonTitle: 'Register',
             //   color: const Color(0xFF16402D),
