@@ -99,10 +99,11 @@ class Authentication extends StatelessWidget {
               padding: const EdgeInsets.only(left: 24, bottom: 8),
               child: StyledButton(
                 onPressed: () {
-                  // signOut();
-                  Navigator.pushReplacementNamed(context, 'chat_screen');
+                  signOut();
+                  // Navigator.pushReplacementNamed(context, 'chat_screen');
                   // Navigator.push(context,
                   //     MaterialPageRoute(builder: (context) => ChatScreen()));
+                  chatScreen();
                 },
                 child: const Text('SUCCESS'),
               ),

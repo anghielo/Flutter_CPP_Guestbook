@@ -75,7 +75,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 const SizedBox(width: 10),
                 TypewriterAnimatedTextKit(
                   // '${controller.value.toInt()}%',
-                  text: const ['CHAT @ CPP'],
+                  text: const ['CPP MEETS'],
                   textStyle: TextStyle(
                     color: Colors.blue.shade900,
                     fontSize: 40.0,
