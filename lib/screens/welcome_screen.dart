@@ -1,9 +1,9 @@
-import 'package:calpoly_tick_talk/screens/login_screen.dart';
-import 'package:calpoly_tick_talk/screens/registration_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:calpoly_tick_talk/components/rounded_button.dart';
+
+import '/components/rounded_button.dart';
+import '/screens/login_screen.dart';
+import '/screens/registration_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
@@ -25,11 +25,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   void initState() {
     super.initState();
-
-    Firebase.initializeApp().whenComplete(() {
-      //print("completed");
-      setState(() {});
-    });
 
     controller = AnimationController(
       duration: const Duration(seconds: 2),
@@ -92,7 +87,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
             // Calling created widget and passing 3 variables
             RoundedButton(
-              buttonTitle: 'Log In',
+              buttonTitle: 'Welcome back friend :)',
               color: const Color(0xFFF9AF0F),
               onPress: () {
                 //Go to login screen
@@ -102,17 +97,17 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 );
               },
             ),
-            RoundedButton(
-              buttonTitle: 'Register',
-              color: const Color(0xFF16402D),
-              onPress: () {
-                //Go to login screen
-                Navigator.pushNamed(
-                  context,
-                  RegistrationScreen.id,
-                );
-              },
-            ),
+            // RoundedButton(
+            //   buttonTitle: 'Register',
+            //   color: const Color(0xFF16402D),
+            //   onPress: () {
+            //     //Go to registration screen
+            //     Navigator.pushNamed(
+            //       context,
+            //       RegistrationScreen.id,
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),

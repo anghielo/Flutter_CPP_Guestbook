@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:calpoly_tick_talk/constants.dart';
-import 'package:calpoly_tick_talk/components/rounded_button.dart';
-import 'package:calpoly_tick_talk/screens/chat_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-// import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:provider/provider.dart';
+
+import '../main.dart';
+import '/screens/chat_screen.dart';
+import '/services/authentication.dart';
+import '/components/rounded_button.dart';
 
 class LoginScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
@@ -17,9 +20,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _auth = FirebaseAuth.instance;
-  late String email;
-  late String password;
   bool showSpinner = false;
 
   @override
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Flexible(
                 child: Hero(
                   tag: 'logo',
-                  child: Container(
+                  child: SizedBox(
                     height: 200.0,
                     child: Image.asset('images/logo.png'),
                   ),
@@ -47,60 +47,71 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 48.0,
               ),
-              TextField(
-                keyboardType: TextInputType.emailAddress,
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  email = value;
-                },
-                decoration: kTextFieldDecoration.copyWith(
-                  hintText: 'myname@cpp.edu',
-                  labelText: 'Enter your email',
+              Consumer<ApplicationState>(
+                builder: (context, appState, _) => Authentication(
+                  email: appState.email,
+                  loginState: appState.loginState,
+                  startLoginFlow: appState.startLoginFlow,
+                  verifyEmail: appState.verifyEmail,
+                  signInWithEmailAndPassword:
+                      appState.signInWithEmailAndPassword,
+                  cancelRegistration: appState.cancelRegistration,
+                  registerAccount: appState.registerAccount,
+                  signOut: appState.signOut,
                 ),
               ),
+              // TextField(
+              //   keyboardType: TextInputType.emailAddress,
+              //   textAlign: TextAlign.center,
+              //   onChanged: (value) {
+              //     email = value;
+              //   },
+              //   decoration: kTextFieldDecoration.copyWith(
+              //     hintText: 'myname@cpp.edu',
+              //     labelText: 'Enter your email',
+              //   ),
+              // ),
               const SizedBox(
                 height: 8.0,
               ),
-              TextField(
-                obscureText: true,
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  password = value;
-                },
-                decoration: kTextFieldDecoration.copyWith(
-                  hintText: '******',
-                  labelText: 'Enter your password',
-                ),
-              ),
+              // TextField(
+              //   obscureText: true,
+              //   textAlign: TextAlign.center,
+              //   onChanged: (value) {
+              //     password = value;
+              //   },
+              //   decoration: kTextFieldDecoration.copyWith(
+              //     hintText: '******',
+              //     labelText: 'Enter your password',
+              //   ),
+              // ),
               const SizedBox(
                 height: 15.0,
               ),
-              RoundedButton(
-                buttonTitle: 'Log In',
-                color: const Color(0xFFF9AF0F),
-                onPress: () async {
-                  setState(() {
-                    // Indicate loading pending authentication
-                    showSpinner = true;
-                  });
-                  // print('Testing login');
-                  // print(email);
-                  try {
-                    final user = await _auth.signInWithEmailAndPassword(
-                        email: email, password: password);
-                    if (user != null) {
-                      // After successful login, usher user to the chat page
-                      Navigator.pushNamed(context, ChatScreen.id);
-                    }
-                    setState(() {
-                      // Indicate loading complete
-                      showSpinner = false;
-                    });
-                  } catch (e) {
-                    // print(e);
-                  }
-                },
-              ),
+              // RoundedButton(
+              //   buttonTitle: 'Log In',
+              //   color: const Color(0xFFF9AF0F),
+              //   onPress: () async {
+              //     setState(() {
+              //       // Indicate loading pending authentication
+              //       showSpinner = true;
+              //     });
+              //     // print('Testing login');
+              //     // print(email);
+              //     try {
+              //       final user = await _auth.signInWithEmailAndPassword(
+              //           email: email, password: password);
+              //       Navigator.pushNamed(context, ChatScreen.id);
+              //
+              //       setState(() {
+              //         // Indicate loading complete
+              //         showSpinner = false;
+              //       });
+              //     } catch (e) {
+              //       // print(e);
+              //     }
+              //   },
+              // ),
             ],
           ),
         ),
