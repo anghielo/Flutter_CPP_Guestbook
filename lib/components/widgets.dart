@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  final String heading;
-
   const Header(this.heading);
-
-  // const Header({Key? key, required this.heading}) : super(key: key);
+  final String heading;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -52,11 +49,9 @@ class IconAndDetail extends StatelessWidget {
 }
 
 class StyledButton extends StatelessWidget {
+  const StyledButton({required this.child, required this.onPressed});
   final Widget child;
   final void Function() onPressed;
-
-  const StyledButton({Key? key, required this.child, required this.onPressed})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) => OutlinedButton(

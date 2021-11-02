@@ -1,3 +1,4 @@
+import 'package:calpoly_tick_talk/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 import '/components/widgets.dart';
@@ -11,29 +12,36 @@ enum ApplicationLoginState {
 }
 
 class Authentication extends StatelessWidget {
-  const Authentication(
-      {Key? key,
-      required this.loginState,
-      required this.email,
-      required this.startLoginFlow,
-      required this.verifyEmail,
-      required this.signInWithEmailAndPassword,
-      required this.cancelRegistration,
-      required this.registerAccount,
-      required this.signOut})
-      : super(key: key);
+  const Authentication({
+    required this.loginState,
+    required this.email,
+    required this.startLoginFlow,
+    required this.verifyEmail,
+    required this.signInWithEmailAndPassword,
+    required this.cancelRegistration,
+    required this.registerAccount,
+    required this.signOut,
+  });
 
   final ApplicationLoginState loginState;
   final String? email;
   final void Function() startLoginFlow;
-  final void Function(String email, void Function(Exception e) error)
-      verifyEmail;
   final void Function(
-          String email, String password, void Function(Exception e) error)
-      signInWithEmailAndPassword;
+    String email,
+    void Function(Exception e) error,
+  ) verifyEmail;
+  final void Function(
+    String email,
+    String password,
+    void Function(Exception e) error,
+  ) signInWithEmailAndPassword;
   final void Function() cancelRegistration;
-  final void Function(String email, String displayName, String password,
-      void Function(Exception e) error) registerAccount;
+  final void Function(
+    String email,
+    String displayName,
+    String password,
+    void Function(Exception e) error,
+  ) registerAccount;
   final void Function() signOut;
 
   @override
@@ -48,7 +56,7 @@ class Authentication extends StatelessWidget {
                 onPressed: () {
                   startLoginFlow();
                 },
-                child: const Text('CLICK TO START CHATTING :)'),
+                child: const Text('SIGN IN TO RSVP'),
               ),
             ),
           ],
@@ -91,9 +99,12 @@ class Authentication extends StatelessWidget {
               padding: const EdgeInsets.only(left: 24, bottom: 8),
               child: StyledButton(
                 onPressed: () {
-                  signOut();
+                  // signOut();
+                  Navigator.pushReplacementNamed(context, 'chat_screen');
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (context) => ChatScreen()));
                 },
-                child: const Text('LOGOUT'),
+                child: const Text('SUCCESS'),
               ),
             ),
           ],

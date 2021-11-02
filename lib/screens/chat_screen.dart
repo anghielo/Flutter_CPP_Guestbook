@@ -1,12 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:calpoly_tick_talk/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:calpoly_tick_talk/components/messages_stream.dart';
 
-final _firestore = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
-User? loggedInUser = _auth.currentUser;
+String _name = 'Your Name';
 
 class ChatScreen extends StatefulWidget {
   // static String is used to call the page from the routes property of main
@@ -18,106 +13,146 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  // messageTextController will be used to clear the message after "Send" is pressed
-  final messageTextController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
-
-  // messageText for messages that will be saved in Firestore
-  late String messageText;
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() async {
-    try {
-      final user = _auth.currentUser!;
-      loggedInUser = user;
-      // print(loggedInUser!.email);
-    } catch (e) {
-      // print(e);
-    }
-  }
-
-  // void getMessages() async {
-  //   final messages = await _firestore.collection('messages').getDocuments();
-  //   for (var message in messages.documents) {
-  //     print(message.data);
-  //   }
-  // }
-
-  // Method will listen for stream of messages coming from Firestore
-  // Method messagesStream is replaced with widget MessagesStream()
-  void messagesStream() async {
-    // This is how you subscribe to the Firestore collection. Firestore pushes to stream
-    await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var message in snapshot.docs) {
-        // print(message.data);
-      }
-    }
-  }
+class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
+  final List<ChatMessage> _messages = [];
+  final _textController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  bool _isComposing = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: null,
-        actions: <Widget>[
-          IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                //messagesStream(); // Can be deleted after testing
-                // getMessages(); // Testing if data is pulling
-                // Logout user
-                _auth.signOut();
-                Navigator.pop(context);
-              }),
-        ],
-        centerTitle: true,
-        title: const Text('What\'s on your mind?'),
-        backgroundColor: const Color(0xFF16402D),
+        title: const Text('Hello curious mind :)'),
+        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
-      body: SafeArea(
+      body: Container(
+        decoration: Theme.of(context).platform == TargetPlatform.iOS //new
+            ? BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: Colors.grey[200]!),
+                ),
+              )
+            : null,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            // MessageStream calls StreamBuilder to be able to update the chat from Firestore
-            const MessagesStream(),
+          children: [
+            Flexible(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8.0),
+                reverse: true,
+                itemBuilder: (_, index) => _messages[index],
+                itemCount: _messages.length,
+              ),
+            ),
+            const Divider(height: 1.0),
             Container(
-              decoration: kMessageContainerDecoration,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      // messageTextController will control the message text field
-                      controller: messageTextController,
-                      onChanged: (value) {
-                        // The message text value becomes messageText.
-                        messageText = value;
-                      },
-                      decoration: kMessageTextFieldDecoration,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // Send messages and clear the message text field
-                      messageTextController.clear();
-                      // messages is the collection in Firestore Database
-                      _firestore.collection('messages').add({
-                        'text': messageText,
-                        'sender': loggedInUser!.email,
-                        'time': FieldValue.serverTimestamp()
-                      });
-                    },
-                    child: const Text(
-                      'Send',
-                      style: kSendButtonTextStyle,
-                    ),
+              decoration: BoxDecoration(color: Theme.of(context).cardColor),
+              child: _buildTextComposer(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextComposer() {
+    return IconTheme(
+      data: IconThemeData(color: Theme.of(context).colorScheme.secondary),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          children: [
+            Flexible(
+              child: TextField(
+                controller: _textController,
+                onChanged: (text) {
+                  setState(() {
+                    _isComposing = text.isNotEmpty;
+                  });
+                },
+                onSubmitted: _isComposing ? _handleSubmitted : null,
+                decoration:
+                    const InputDecoration.collapsed(hintText: 'Send a message'),
+                focusNode: _focusNode,
+              ),
+            ),
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoButton(
+                        onPressed: _isComposing
+                            ? () => _handleSubmitted(_textController.text)
+                            : null,
+                        child: const Text('Send'),
+                      )
+                    : IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: _isComposing
+                            ? () => _handleSubmitted(_textController.text)
+                            : null,
+                      ))
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handleSubmitted(String text) {
+    _textController.clear();
+    setState(() {
+      _isComposing = false;
+    });
+    var message = ChatMessage(
+      text: text,
+      animationController: AnimationController(
+        duration: const Duration(milliseconds: 700),
+        vsync: this,
+      ),
+    );
+    setState(() {
+      _messages.insert(0, message);
+    });
+    _focusNode.requestFocus();
+    message.animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    for (var message in _messages) {
+      message.animationController.dispose();
+    }
+    super.dispose();
+  }
+}
+
+class ChatMessage extends StatelessWidget {
+  const ChatMessage({required this.text, required this.animationController});
+  final String text;
+  final AnimationController animationController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizeTransition(
+      sizeFactor:
+          CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+      axisAlignment: 0.0,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 16.0),
+              child: CircleAvatar(child: Text(_name[0])),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_name, style: Theme.of(context).textTheme.headline4),
+                  Container(
+                    margin: const EdgeInsets.only(top: 5.0),
+                    child: Text(text),
                   ),
                 ],
               ),
