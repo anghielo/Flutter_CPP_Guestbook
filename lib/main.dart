@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:intl/intl.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '/screens/welcome_screen.dart';
@@ -30,27 +32,51 @@ class CPPChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Cannot use the 'home' property if using the routes property
-      //home: WelcomeScreen(),
       debugShowCheckedModeBanner:
           false, // Turn off red debug banner phone emulator
-      routes: {
-        // Using static variables instead for faster load
-        // '/': (context) => WelcomeScreen(),
-        WelcomeScreen.id: (context) => const WelcomeScreen(),
-        // LoginScreen.id: (context) => const LoginScreen(),
-        // RegistrationScreen.id: (context) => const RegistrationScreen(),
-        ChatScreen.id: (context) => const ChatScreen(),
-      },
-      initialRoute: WelcomeScreen.id,
+      title: 'CPP Guestbook',
+      theme: ThemeData(
+        buttonTheme: Theme.of(context).buttonTheme.copyWith(
+              highlightColor: Colors.deepPurple,
+            ),
+        primarySwatch: Colors.teal,
+        textTheme: GoogleFonts.robotoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const WelcomeScreen(),
     );
   }
 }
 
-class WelcomeScreen extends StatefulWidget {
-  // static String is used to call the page from the routes property of main
-  static String id = 'welcome_screen';
+final listOfImages = <String>[
+  "assets/icons/CPP_Guestbook01.png",
+  "assets/icons/CPP_Guestbook02.png",
+  "assets/icons/CPP_Guestbook03.png",
+  "assets/icons/CPP_Guestbook04.png",
+  "assets/icons/CPP_Guestbook05.png",
+  "assets/icons/CPP_Guestbook06.png",
+  "assets/icons/CPP_Guestbook07.png",
+  "assets/icons/CPP_Guestbook08.png",
+  "assets/icons/CPP_Guestbook09.png",
+  "assets/icons/CPP_Guestbook10.png",
+  "assets/icons/CPP_Guestbook11.png",
+  "assets/icons/CPP_Guestbook12.png",
+  "assets/icons/CPP_Guestbook13.png",
+  "assets/icons/CPP_Guestbook14.png",
+];
 
+Random random = Random();
+String randomImage() {
+  int min = 0;
+  int max = listOfImages.length - 1;
+  int r = min + random.nextInt(max - min);
+  String imageName = listOfImages[r].toString();
+  return imageName;
+}
+
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -92,88 +118,74 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     super.dispose();
   }
 
+  String formattedDate = DateFormat.yMMMd().format(DateTime.now());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: tweenAnimation.value, //Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Hero(
-                  tag: 'logo',
-                  child: SizedBox(
-                    child: Image.asset('images/logo.png'),
-                    // Animation increases the logo in size
-                    height: animation.value * 50.0,
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('CPP Guestbook'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Image.asset(randomImage()),
+          const SizedBox(height: 8),
+          IconAndDetail(Icons.calendar_today, formattedDate),
+          const IconAndDetail(
+              Icons.school, '3801 W Temple Ave, Pomona, CA 91768'),
+          Consumer<ApplicationState>(
+            builder: (context, appState, _) => Authentication(
+              email: appState.email,
+              loginState: appState.loginState,
+              startLoginFlow: appState.startLoginFlow,
+              verifyEmail: appState.verifyEmail,
+              signInWithEmailAndPassword: appState.signInWithEmailAndPassword,
+              cancelRegistration: appState.cancelRegistration,
+              registerAccount: appState.registerAccount,
+              signOut: appState.signOut,
+            ),
+          ),
+          const Divider(
+            height: 8,
+            thickness: 1,
+            indent: 8,
+            endIndent: 8,
+            color: Colors.grey,
+          ),
+          const Header("Welcome! Sign our guestbook :)"),
+          const Paragraph(
+            'Say hi and meet new friends!',
+          ),
+          // To view publicly
+          // const Header('Discussion'),
+          // GuestBook(addMessage: (String message) => print(message)),
+          Consumer<ApplicationState>(
+            builder: (context, appState, _) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (appState.attendees >= 10)
+                  Paragraph('${appState.attendees} people are connected')
+                else if (appState.attendees == 5)
+                  Paragraph('Learn, Explore, Experience')
+                else
+                  Paragraph('Connect and sign our guestbook'),
+                if (appState.loginState == ApplicationLoginState.loggedIn) ...[
+                  YesNoSelection(
+                    state: appState.attending,
+                    onSelection: (attending) => appState.attending = attending,
                   ),
-                ),
-                const SizedBox(width: 10),
-                TypewriterAnimatedTextKit(
-                  // '${controller.value.toInt()}%',
-                  text: const ['CPP MEETS'],
-                  textStyle: TextStyle(
-                    color: Colors.blue.shade900,
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.w900,
+                  const Header('Discussion'),
+                  GuestBook(
+                    addMessage: (String message) =>
+                        appState.addMessageToGuestBook(message),
+                    messages: appState.guestBookMessages,
                   ),
-                ),
-                const SizedBox(height: 24.0),
-                Consumer<ApplicationState>(
-                  builder: (context, appState, _) => Authentication(
-                    email: appState.email,
-                    loginState: appState.loginState,
-                    startLoginFlow: appState.startLoginFlow,
-                    verifyEmail: appState.verifyEmail,
-                    signInWithEmailAndPassword:
-                        appState.signInWithEmailAndPassword,
-                    cancelRegistration: appState.cancelRegistration,
-                    registerAccount: appState.registerAccount,
-                    signOut: appState.signOut,
-                  ),
-                ),
-                const Divider(
-                  height: 8,
-                  thickness: 1,
-                  indent: 8,
-                  endIndent: 8,
-                  color: Colors.grey,
-                ),
-                Consumer<ApplicationState>(
-                  builder: (context, appState, _) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (appState.attendees >= 2)
-                        Paragraph('${appState.attendees} people are connected')
-                      else if (appState.attendees == 1)
-                        Paragraph('1 person connected')
-                      else
-                        Paragraph('No one is connected'),
-                      if (appState.loginState ==
-                          ApplicationLoginState.loggedIn) ...[
-                        YesNoSelection(
-                          state: appState.attending,
-                          onSelection: (attending) =>
-                              appState.attending = attending,
-                        ),
-                        const Header('Discussion'),
-                        GuestBook(
-                          addMessage: (String message) =>
-                              appState.addMessageToGuestBook(message),
-                          messages: appState.guestBookMessages,
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+                ],
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -343,8 +355,6 @@ class ApplicationState extends ChangeNotifier {
   void signOut() {
     FirebaseAuth.instance.signOut();
   }
-
-  void chatScreen() {}
 }
 
 class GuestBookMessage {

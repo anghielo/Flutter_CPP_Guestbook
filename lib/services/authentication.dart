@@ -1,4 +1,3 @@
-import 'package:calpoly_tick_talk/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 import '/components/widgets.dart';
@@ -56,7 +55,7 @@ class Authentication extends StatelessWidget {
                 onPressed: () {
                   startLoginFlow();
                 },
-                child: const Text('SIGN IN TO RSVP'),
+                child: const Text('SIGN IN TO CHAT'),
               ),
             ),
           ],
@@ -100,12 +99,8 @@ class Authentication extends StatelessWidget {
               child: StyledButton(
                 onPressed: () {
                   signOut();
-                  // Navigator.pushReplacementNamed(context, 'chat_screen');
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => ChatScreen()));
-                  chatScreen();
                 },
-                child: const Text('SUCCESS'),
+                child: const Text('LOGOUT'),
               ),
             ),
           ],
