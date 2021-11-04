@@ -1,34 +1,27 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:intl/intl.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '/screens/welcome_screen.dart';
-import '/screens/login_screen.dart';
-import '/screens/registration_screen.dart';
-import '/screens/chat_screen.dart';
-import '/services/authentication.dart';
-import '/components/widgets.dart';
+import 'services/authentication.dart';
+import 'components/widgets.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => ApplicationState(),
-      builder: (context, _) => const CPPChat(),
+      builder: (context, _) => CPPChat(),
     ),
   );
 }
 
 class CPPChat extends StatelessWidget {
-  const CPPChat({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,26 +38,26 @@ class CPPChat extends StatelessWidget {
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const WelcomeScreen(),
+      home: const HomePage(),
     );
   }
 }
 
 final listOfImages = <String>[
-  "assets/icons/CPP_Guestbook01.png",
-  "assets/icons/CPP_Guestbook02.png",
-  "assets/icons/CPP_Guestbook03.png",
-  "assets/icons/CPP_Guestbook04.png",
-  "assets/icons/CPP_Guestbook05.png",
-  "assets/icons/CPP_Guestbook06.png",
-  "assets/icons/CPP_Guestbook07.png",
-  "assets/icons/CPP_Guestbook08.png",
-  "assets/icons/CPP_Guestbook09.png",
-  "assets/icons/CPP_Guestbook10.png",
-  "assets/icons/CPP_Guestbook11.png",
-  "assets/icons/CPP_Guestbook12.png",
-  "assets/icons/CPP_Guestbook13.png",
-  "assets/icons/CPP_Guestbook14.png",
+  "assets/banner/CPP_Guestbook01.png",
+  "assets/banner/CPP_Guestbook02.png",
+  "assets/banner/CPP_Guestbook03.png",
+  "assets/banner/CPP_Guestbook04.png",
+  "assets/banner/CPP_Guestbook05.png",
+  "assets/banner/CPP_Guestbook06.png",
+  "assets/banner/CPP_Guestbook07.png",
+  "assets/banner/CPP_Guestbook08.png",
+  "assets/banner/CPP_Guestbook09.png",
+  "assets/banner/CPP_Guestbook10.png",
+  "assets/banner/CPP_Guestbook11.png",
+  "assets/banner/CPP_Guestbook12.png",
+  "assets/banner/CPP_Guestbook13.png",
+  "assets/banner/CPP_Guestbook14.png",
 ];
 
 Random random = Random();
@@ -76,49 +69,11 @@ String randomImage() {
   return imageName;
 }
 
-class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+// Requires intl package
+String formattedDate = DateFormat.yMMMd().format(DateTime.now());
 
-  @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
-}
-
-// Adding the SingleTickerProviderStateMixin enables  _WelcomeScreenState to act as a ticker provider
-class _WelcomeScreenState extends State<WelcomeScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation animation;
-  late Animation tweenAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      // Ticker provider which is the object created from the class
-      vsync: this,
-    );
-
-    animation = CurvedAnimation(parent: controller, curve: Curves.decelerate);
-    tweenAnimation =
-        ColorTween(begin: Colors.green, end: Colors.white).animate(controller);
-
-    // An animation value from 0.0 to 1.0
-    controller.forward();
-    controller.addListener(() {
-      setState(() {});
-      //print(animation.value);
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  String formattedDate = DateFormat.yMMMd().format(DateTime.now());
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -129,11 +84,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       ),
       body: ListView(
         children: <Widget>[
-          Image.asset(randomImage()),
+          Image.asset('assets/banner/CPP_Guestbook04.png'),
           const SizedBox(height: 8),
           IconAndDetail(Icons.calendar_today, formattedDate),
           const IconAndDetail(
-              Icons.school, '3801 W Temple Ave, Pomona, CA 91768'),
+              Icons.location_city, '3801 W Temple Ave, Pomona, CA 91768'),
           Consumer<ApplicationState>(
             builder: (context, appState, _) => Authentication(
               email: appState.email,
@@ -153,9 +108,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             endIndent: 8,
             color: Colors.grey,
           ),
-          const Header("Welcome! Sign our guestbook :)"),
+          const Header("What we'll be doing"),
           const Paragraph(
-            'Say hi and meet new friends!',
+            'Join us for a day full of Firebase Workshops and Pizza!',
           ),
           // To view publicly
           // const Header('Discussion'),
@@ -164,12 +119,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             builder: (context, appState, _) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (appState.attendees >= 10)
+                if (appState.attendees >= 2)
                   Paragraph('${appState.attendees} people are connected')
-                else if (appState.attendees == 5)
-                  Paragraph('Learn, Explore, Experience')
+                else if (appState.attendees == 1)
+                  const Paragraph('Learn, Explore, Experience')
                 else
-                  Paragraph('Connect and sign our guestbook'),
+                  const Paragraph('Connect and sign our guestbook'),
                 if (appState.loginState == ApplicationLoginState.loggedIn) ...[
                   YesNoSelection(
                     state: appState.attending,
@@ -404,7 +359,7 @@ class _GuestBookState extends State<GuestBook> {
                     },
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 StyledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
@@ -413,7 +368,7 @@ class _GuestBookState extends State<GuestBook> {
                     }
                   },
                   child: Row(
-                    children: [
+                    children: const [
                       Icon(Icons.send),
                       SizedBox(width: 4),
                       Text('SEND'),
@@ -424,10 +379,10 @@ class _GuestBookState extends State<GuestBook> {
             ),
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         for (var message in widget.messages)
           Paragraph('${message.name}: ${message.message}'),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
       ],
     );
   }
@@ -443,53 +398,53 @@ class YesNoSelection extends StatelessWidget {
     switch (state) {
       case Attending.yes:
         return Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(elevation: 0),
                 onPressed: () => onSelection(Attending.yes),
-                child: Text('YES'),
+                child: const Text('YES'),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               TextButton(
                 onPressed: () => onSelection(Attending.no),
-                child: Text('NO'),
+                child: const Text('NO'),
               ),
             ],
           ),
         );
       case Attending.no:
         return Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
               TextButton(
                 onPressed: () => onSelection(Attending.yes),
-                child: Text('YES'),
+                child: const Text('YES'),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(elevation: 0),
                 onPressed: () => onSelection(Attending.no),
-                child: Text('NO'),
+                child: const Text('NO'),
               ),
             ],
           ),
         );
       default:
         return Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
               StyledButton(
                 onPressed: () => onSelection(Attending.yes),
-                child: Text('YES'),
+                child: const Text('YES'),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               StyledButton(
                 onPressed: () => onSelection(Attending.no),
-                child: Text('NO'),
+                child: const Text('NO'),
               ),
             ],
           ),
