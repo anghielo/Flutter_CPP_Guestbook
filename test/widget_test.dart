@@ -1,4 +1,4 @@
-import 'package:cppMeets/main.dart';
+import 'package:calpoly_tick_talk/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
